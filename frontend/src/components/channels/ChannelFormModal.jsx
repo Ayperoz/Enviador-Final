@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import './ModalShared.css';
 import './ChannelFormModal.css';
+import { COUNTRY_CALLING_CODES } from '../../constants/countryCallingCodes.js';
 
 const defaultValues = {
   name: '',
@@ -127,18 +128,21 @@ export default function ChannelFormModal({
             </>
           ) : (
             <>
-              <label className="modal__label" htmlFor="channel-area">
-                Código de área
+              <label className="modal__label" htmlFor="channel-country">
+                País
               </label>
-              <input
-                id="channel-area"
+              <select
+                id="channel-country"
                 name="areaCode"
                 value={values.areaCode}
                 onChange={handleChange}
-                placeholder="Ej. 549"
-                inputMode="numeric"
-                maxLength={10}
-              />
+              >
+                {COUNTRY_CALLING_CODES.map(({ country, code }) => (
+                  <option key={`${country}-${code}`} value={code}>
+                    {country} (+{code})
+                  </option>
+                ))}
+              </select>
             </>
           )}
 
