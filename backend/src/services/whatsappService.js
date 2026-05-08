@@ -22,6 +22,7 @@ const BAILEYS_DEBUG = process.env.BAILEYS_DEBUG === 'true';
 const BAILEYS_LOG_LEVEL = process.env.NODE_ENV === 'production' ? 'error' : 'warn';
 const CALENTADOR_PHONE = process.env.CALENTADOR ? process.env.CALENTADOR.trim() : '';
 const WARMUP_MESSAGE = 'iniciar';
+const DEFAULT_PRE_RESPONSES_LIMIT = 30;
 const PRESENCE_WAIT_MS = 1_000;
 const warmupConversationQueues = new Map();
 let warmupTablesPromise = null;
@@ -117,6 +118,15 @@ function getRandomDelay(minSeconds, maxSeconds) {
   }
   const seconds = Math.floor(Math.random() * (max - min + 1)) + min;
   return seconds * 1000;
+}
+
+function getRandomWarmupQuestionId() {
+  const configuredMaxId = Number.parseInt(process.env.cant_preResp, 10);
+  const maxId = Number.isFinite(configuredMaxId) && configuredMaxId > 0
+    ? configuredMaxId
+    : DEFAULT_PRE_RESPONSES_LIMIT;
+
+  return Math.floor(Math.random() * maxId) + 1;
 }
 
 async function resolveWarmupTables() {
@@ -225,11 +235,13 @@ async function processWarmupMessage(channelId, session, message) {
     return;
   }
 
+  const randomQuestionId = getRandomWarmupQuestionId();
+
   const randomQuestionLookup = await queryWarmup(
     `SELECT mensaje FROM ${tables.preguntas}
-     WHERE mensaje IS NOT NULL AND btrim(mensaje) <> ''
-     ORDER BY RANDOM()
-     LIMIT 1`
+     WHERE id = $1 AND mensaje IS NOT NULL AND btrim(mensaje) <> ''
+     LIMIT 1`,
+    [randomQuestionId]
   );
   const randomQuestion = (randomQuestionLookup.rows[0]?.mensaje || '').trim();
   if (!randomQuestion) {

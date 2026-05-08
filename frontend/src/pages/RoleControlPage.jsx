@@ -29,6 +29,7 @@ export default function RoleControlPage() {
     channelLimit: '',
     warmersLimit: '',
     campaignLimit: '',
+    preResponsesLimit: '',
     normalizerEnabled: false
   });
   const [saving, setSaving] = useState(false);
@@ -55,6 +56,7 @@ export default function RoleControlPage() {
       channelLimit: settings.channelLimit != null ? String(settings.channelLimit) : '',
       warmersLimit: settings.warmersLimit != null ? String(settings.warmersLimit) : '',
       campaignLimit: settings.campaignLimit != null ? String(settings.campaignLimit) : '',
+      preResponsesLimit: settings.preResponsesLimit != null ? String(settings.preResponsesLimit) : '',
       normalizerEnabled: Boolean(settings.normalizerEnabled)
     });
   }, [settings]);
@@ -128,6 +130,12 @@ export default function RoleControlPage() {
       return;
     }
 
+    const preResponsesLimit = Number.parseInt(formValues.preResponsesLimit, 10);
+    if (!Number.isFinite(preResponsesLimit) || preResponsesLimit <= 0) {
+      setError('La cantidad de preguntas aleatorias debe ser un número mayor a cero.');
+      return;
+    }
+
     if (warmersLimit > channelLimit) {
       setError('La cantidad de calentadores no puede superar la cantidad de canales.');
       return;
@@ -140,6 +148,7 @@ export default function RoleControlPage() {
         channelLimit,
         warmersLimit,
         campaignLimit,
+        preResponsesLimit,
         normalizerEnabled: formValues.normalizerEnabled
       });
 
@@ -147,6 +156,7 @@ export default function RoleControlPage() {
         channelLimit: updated.channelLimit != null ? String(updated.channelLimit) : '',
         warmersLimit: updated.warmersLimit != null ? String(updated.warmersLimit) : '',
         campaignLimit: updated.campaignLimit != null ? String(updated.campaignLimit) : '',
+        preResponsesLimit: updated.preResponsesLimit != null ? String(updated.preResponsesLimit) : '',
         normalizerEnabled: Boolean(updated.normalizerEnabled)
       });
 
@@ -345,6 +355,22 @@ export default function RoleControlPage() {
             />
             <small className="role-control__help">
               Número máximo de campañas activas permitidas.
+            </small>
+          </label>
+
+          <label className="role-control__field" htmlFor="preResponsesLimit">
+            <span className="role-control__label">Preguntas aleatorias del calentador</span>
+            <input
+              id="preResponsesLimit"
+              name="preResponsesLimit"
+              type="number"
+              min="1"
+              value={formValues.preResponsesLimit}
+              onChange={handleNumberChange}
+              required
+            />
+            <small className="role-control__help">
+              Valor máximo para seleccionar una pregunta aleatoria por ID en la base del calentador.
             </small>
           </label>
         </div>

@@ -2,6 +2,8 @@ import logger from '../logger.js';
 import { booleanToEnvValue, getBooleanFromEnv, getIntFromEnv, setEnvValue } from '../utils/envConfig.js';
 import { syncChannelWarmers } from '../utils/channelWarmers.js';
 
+const DEFAULT_PRE_RESPONSES_LIMIT = 30;
+
 /**
  * Lee la configuración operativa desde variables de entorno y la devuelve normalizada.
  */
@@ -10,6 +12,7 @@ function normalizeSettings() {
   let warmersLimit = getIntFromEnv('CANT_CALENTADORES', { allowZero: true });
   const campaignLimit = getIntFromEnv('CANT_CAMPAINS');
   const normalizer = getBooleanFromEnv('NORMALIZER_VISIBLE');
+  const preResponsesLimit = getIntFromEnv('cant_preResp') ?? DEFAULT_PRE_RESPONSES_LIMIT;
 
   if (warmersLimit == null && channelLimit != null) {
     warmersLimit = channelLimit;
@@ -19,6 +22,7 @@ function normalizeSettings() {
     channelLimit: channelLimit ?? null,
     warmersLimit: warmersLimit ?? null,
     campaignLimit: campaignLimit ?? null,
+    preResponsesLimit,
     normalizerEnabled: normalizer ?? false
   };
 }
@@ -75,6 +79,9 @@ export async function updateSettings(req, res) {
     const campaignLimit = parseInteger(req.body.campaignLimit, {
       fieldName: 'cantidad de campañas'
     });
+    const preResponsesLimit = parseInteger(req.body.preResponsesLimit, {
+      fieldName: 'cantidad de preguntas aleatorias'
+    });
 
     if (typeof req.body.normalizerEnabled !== 'boolean') {
       throw new Error('El campo normalizador debe ser verdadero o falso.');
@@ -87,6 +94,7 @@ export async function updateSettings(req, res) {
     await setEnvValue('CANT_CHANNELS', String(channelLimit));
     await setEnvValue('CANT_CALENTADORES', String(warmersLimit));
     await setEnvValue('CANT_CAMPAINS', String(campaignLimit));
+    await setEnvValue('cant_preResp', String(preResponsesLimit));
     await setEnvValue('NORMALIZER_VISIBLE', booleanToEnvValue(req.body.normalizerEnabled));
 
     await syncChannelWarmers();
