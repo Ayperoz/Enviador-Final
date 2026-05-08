@@ -2,7 +2,8 @@ import { getClient, query } from '../db/index.js';
 import {
   buildWhatsAppJid,
   getActiveChannelDispatchers,
-  normalisePhoneNumber
+  normalisePhoneNumber,
+  normaliseWhatsAppRecipient
 } from './whatsappService.js';
 import { getActiveTelegramDispatchers } from './telegramService.js';
 import logger from '../logger.js';
@@ -299,7 +300,11 @@ async function processRow(runner, channel, row, waitPromise = Promise.resolve(tr
 
   const isTelegramChannel = channel?.type === 'telegram';
   const areaDigits = normalisePhoneNumber(channel?.areaCode) || '549';
-  const jid = isTelegramChannel ? phoneDigits : buildWhatsAppJid(phoneDigits, areaDigits);
+  const whatsappRecipient = isTelegramChannel ? phoneDigits : normaliseWhatsAppRecipient(recipient, areaDigits);
+  const jid = isTelegramChannel ? phoneDigits : buildWhatsAppJid(whatsappRecipient);
+  if (!isTelegramChannel) {
+    logger.debug(`JID final consultado para campaña ${runner.id}: ${jid}`);
+  }
   if (!jid) {
     await markOutcome(runner, row.id, channel, STATUS_FAILED, VALIDATION_INVALID_NUMBER);
     return;

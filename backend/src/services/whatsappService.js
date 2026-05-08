@@ -68,18 +68,70 @@ function logChannelEvent(channelId, channelName, message, level = 'log') {
   }
 }
 
+function getArgentinaMobileArea(prefix) {
+  if (!prefix?.startsWith('549')) {
+    return '';
+  }
+
+  return prefix.slice(3);
+}
+
+function normaliseArgentinaMobileDigits(digits, areaDigits) {
+  if (digits.startsWith('549')) {
+    return digits;
+  }
+
+  let nationalNumber = digits.startsWith('54') ? digits.slice(2) : digits;
+  if (nationalNumber.startsWith('9')) {
+    nationalNumber = nationalNumber.slice(1);
+  }
+
+  nationalNumber = nationalNumber.replace(/^0+/, '');
+
+  if (areaDigits && nationalNumber.startsWith('15')) {
+    nationalNumber = `${areaDigits}${nationalNumber.slice(2)}`;
+  } else if (areaDigits && !nationalNumber.startsWith(areaDigits) && nationalNumber.length <= 8) {
+    nationalNumber = `${areaDigits}${nationalNumber}`;
+  }
+
+  if (areaDigits && nationalNumber.startsWith(`${areaDigits}15`)) {
+    nationalNumber = `${areaDigits}${nationalNumber.slice(areaDigits.length + 2)}`;
+  } else {
+    for (const areaLength of [2, 3, 4]) {
+      if (nationalNumber.slice(areaLength, areaLength + 2) === '15') {
+        nationalNumber = `${nationalNumber.slice(0, areaLength)}${nationalNumber.slice(areaLength + 2)}`;
+        break;
+      }
+    }
+  }
+
+  return `549${nationalNumber}`;
+}
+
+export function normaliseWhatsAppRecipient(value, areaCode) {
+  const digits = normalisePhoneNumber(value);
+  if (!digits) {
+    return '';
+  }
+
+  const prefix = normalisePhoneNumber(areaCode);
+  const argentinaMobileArea = getArgentinaMobileArea(prefix);
+  if (prefix?.startsWith('549')) {
+    return normaliseArgentinaMobileDigits(digits, argentinaMobileArea);
+  }
+
+  return prefix && !digits.startsWith(prefix) ? `${prefix}${digits}` : digits;
+}
+
 export function buildWhatsAppJid(phoneNumber, areaCode) {
   if (!phoneNumber) {
     return null;
   }
 
-  const digits = normalisePhoneNumber(phoneNumber);
-  if (!digits) {
+  const fullNumber = normaliseWhatsAppRecipient(phoneNumber, areaCode);
+  if (!fullNumber) {
     return null;
   }
-
-  const prefix = normalisePhoneNumber(areaCode);
-  const fullNumber = prefix && !digits.startsWith(prefix) ? `${prefix}${digits}` : digits;
 
   return `${fullNumber}@s.whatsapp.net`;
 }
