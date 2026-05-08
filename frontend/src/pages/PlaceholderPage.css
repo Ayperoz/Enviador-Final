@@ -1,0 +1,19 @@
+.placeholder {
+  background: var(--color-surface);
+  border-radius: 18px;
+  padding: 48px;
+  text-align: center;
+  box-shadow: var(--shadow-elevation-soft);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.placeholder h1 {
+  margin: 0 0 12px;
+  color: var(--color-text);
+}
+
+.placeholder p {
+  margin: 0;
+  color: var(--color-text-muted);
+}

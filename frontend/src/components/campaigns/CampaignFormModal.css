@@ -1,0 +1,395 @@
+.modal--campaign {
+  width: min(760px, 92vw);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal--campaign .modal__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 24px 24px;
+  overflow: hidden;
+}
+
+.campaign-form__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.campaign-form__grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  width: 100%;
+}
+
+.campaign-form__column {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.campaign-form__column--compact {
+  gap: 22px;
+}
+
+.campaign-form__label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.campaign-form__label span,
+.campaign-form__label-helper {
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.campaign-form__label--inline {
+  flex-direction: column;
+  gap: 2px;
+}
+
+.campaign-form__input,
+.campaign-form__time {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  font: inherit;
+  background: var(--color-input-bg);
+  color: var(--color-text);
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+
+.campaign-form__select {
+  cursor: pointer;
+}
+
+.campaign-form__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.campaign-form__block {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.campaign-form__channel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 240px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.campaign-form__channel-list--empty {
+  justify-content: center;
+  padding: 12px 0;
+  color: var(--color-text-muted);
+}
+
+.campaign-form__channel-option {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  cursor: pointer;
+}
+
+.campaign-form__channel-option:hover {
+  border-color: var(--color-primary);
+  border-color: color-mix(in srgb, var(--color-primary) 40%, var(--color-border));
+  box-shadow: var(--shadow-elevation-soft);
+}
+
+.campaign-form__channel-option input {
+  width: 18px;
+  height: 18px;
+}
+
+.campaign-form__channel-option--selected {
+  border-color: var(--color-primary);
+  background: var(--color-surface-alt);
+  box-shadow: var(--shadow-elevation-soft);
+}
+
+.campaign-form__channel-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.campaign-form__channel-name {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.campaign-form__channel-meta {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+
+.campaign-form__channel-status {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.campaign-form__channel-status--online {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.campaign-form__channel-status--offline {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+.campaign-form__helper {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+.campaign-form__helper--accent {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.campaign-form__schedule-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 18px 20px 12px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-elevation-soft);
+  min-height: 10;
+  width: 100%;
+  align-self: stretch;
+}
+
+.campaign-form__schedule-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.campaign-form__schedule-header h3 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1rem;
+}
+
+.campaign-form__schedule-header p {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.campaign-form__schedule-hint {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.campaign-form__schedule-grid {
+  display: grid;
+  grid-template-columns: 100px 88px repeat(4, minmax(0, 1fr));
+  column-gap: 12px;
+  row-gap: 14px;
+  align-items: center;
+}
+
+.campaign-form__schedule-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+
+.campaign-form__schedule-row {
+  display: contents;
+}
+
+.campaign-form__schedule-day {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.campaign-form__toggle-cell {
+  display: flex;
+  align-items: center;
+}
+
+.campaign-form__toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.campaign-form__toggle-input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.campaign-form__toggle-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--color-border);
+  display: inline-flex;
+  align-items: center;
+  padding: 3px;
+  transition: background 0.2s ease;
+  box-sizing: border-box;
+}
+
+.campaign-form__toggle-track::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-border) 70%, transparent);
+}
+
+.campaign-form__toggle-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.campaign-form__toggle-input:checked + .campaign-form__toggle-track {
+  background: var(--color-primary);
+}
+
+.campaign-form__toggle-input:checked + .campaign-form__toggle-track .campaign-form__toggle-thumb {
+  transform: translateX(20px);
+  background: var(--color-primary-contrast);
+}
+
+.campaign-form__toggle-input:focus-visible + .campaign-form__toggle-track {
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.campaign-form__time {
+  font-size: 0.88rem;
+}
+
+.campaign-form__schedule-grid input[type='time'] {
+  width: 100%;
+}
+
+.campaign-form__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-top: 12px;
+}
+
+.campaign-form__summary {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.campaign-form__summary strong {
+  color: var(--color-text);
+}
+
+.campaign-form__actions {
+  display: flex;
+  gap: 12px;
+}
+
+.campaign-form__actions button {
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.campaign-form__actions button:hover {
+  background: var(--color-surface-alt);
+}
+
+.campaign-form__actions button[type='submit'] {
+  background: var(--color-primary);
+  color: var(--color-primary-contrast);
+  border: none;
+  box-shadow: var(--shadow-elevation-soft);
+}
+
+.campaign-form__actions button[type='submit']:hover {
+  transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+  .campaign-form__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .campaign-form__day {
+    grid-template-columns: 1fr;
+  }
+
+  .campaign-form__day-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .campaign-form__footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .campaign-form__actions {
+    justify-content: flex-end;
+  }
+}

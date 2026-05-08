@@ -1,0 +1,104 @@
+.base-selection-modal {
+  position: relative;
+  width: min(420px, 92vw);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-radius: 18px;
+  padding: 28px 28px 24px;
+  box-shadow: var(--shadow-elevation);
+}
+
+.base-selection-modal__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  color: var(--color-text-muted);
+}
+
+.base-selection-modal__title {
+  margin: 0 0 8px;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.base-selection-modal__description {
+  margin: 0 0 20px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.base-selection-modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.base-selection-modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.base-selection-modal__select {
+  border: 1px solid var(--color-border);
+  background: var(--color-input-bg);
+  color: var(--color-text);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 1rem;
+}
+
+.base-selection-modal__select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.base-selection-modal__message {
+  padding: 11px 12px;
+  border-radius: 10px;
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  font-weight: 500;
+}
+
+.base-selection-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.base-selection-modal__button {
+  padding: 11px 18px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  font-weight: 600;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.base-selection-modal__button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.base-selection-modal__button--secondary {
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.base-selection-modal__button--secondary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-elevation-soft);
+}
+
+.base-selection-modal__button--primary {
+  background: var(--color-primary);
+  color: var(--color-primary-contrast);
+}
+
+.base-selection-modal__button--primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-elevation);
+}

@@ -1,0 +1,116 @@
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 28px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.topbar__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.topbar__controls {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topbar__username {
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background: var(--color-surface-alt);
+  padding: 8px 14px;
+  border-radius: 999px;
+}
+
+.topbar__menu-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.topbar__menu-button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-elevation-soft);
+  border-color: var(--color-primary);
+}
+
+.topbar__menu-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.topbar__menu-icon {
+  width: 22px;
+  height: 22px;
+  color: var(--color-text);
+}
+
+.topbar__menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  min-width: 220px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: var(--shadow-elevation);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 20;
+}
+
+.topbar__menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: var(--color-text);
+  font-weight: 500;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.topbar__menu-item:hover:not(:disabled) {
+  background: var(--color-surface-alt);
+  transform: translateY(-1px);
+}
+
+.topbar__menu-item:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.topbar__menu-item--danger {
+  color: var(--color-danger);
+}
+
+.topbar__menu-item--danger:hover:not(:disabled) {
+  background: var(--color-danger-bg);
+}
+
+.topbar__menu-message {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+}

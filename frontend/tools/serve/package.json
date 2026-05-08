@@ -1,0 +1,7 @@
+{
+  "name": "serve",
+  "version": "0.0.0",
+  "bin": {
+    "serve": "./bin/serve.js"
+  }
+}

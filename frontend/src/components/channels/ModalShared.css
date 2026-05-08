@@ -1,0 +1,25 @@
+.modal__backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--color-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.modal__close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.modal__close:hover {
+  color: var(--color-text);
+  transform: scale(1.05);
+}
