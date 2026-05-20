@@ -79,6 +79,18 @@ function parsePreview(buffer) {
   };
 }
 
+function downloadTemplate() {
+  const rows = [
+    ['Teléfono', 'Mensaje'],
+    ['1122334455', 'Este es un mensaje de demostración :D']
+  ];
+  const worksheet = XLSX.utils.aoa_to_sheet(rows);
+  const workbook = XLSX.utils.book_new();
+  worksheet['!cols'] = [{ wch: 18 }, { wch: 42 }];
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Plantilla');
+  XLSX.writeFile(workbook, 'plantilla-carga-datos.xlsx');
+}
+
 function formatDateTime(value) {
   if (!value) {
     return '-';
@@ -304,6 +316,15 @@ export default function DataPage() {
                   </span>
                 </div>
               </div>
+
+              <button
+                type="button"
+                className="data-upload-form__template"
+                onClick={downloadTemplate}
+                disabled={loading || isParsing}
+              >
+                Descargar plantilla
+              </button>
 
               {isParsing && <div className="data-upload-form__loading">Procesando archivo...</div>}
               {loading && !isParsing && (

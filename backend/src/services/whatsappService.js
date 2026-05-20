@@ -22,6 +22,7 @@ const BAILEYS_DEBUG = process.env.BAILEYS_DEBUG === 'true';
 const BAILEYS_LOG_LEVEL = process.env.NODE_ENV === 'production' ? 'error' : 'warn';
 const CALENTADOR_PHONE = process.env.CALENTADOR ? process.env.CALENTADOR.trim() : '';
 const WARMUP_MESSAGE = 'iniciar';
+const DEFAULT_PRE_RESPONSES_LIMIT = 30;
 const PRESENCE_WAIT_MS = 1_000;
 const warmupConversationQueues = new Map();
 let warmupTablesPromise = null;
@@ -117,6 +118,44 @@ function getRandomDelay(minSeconds, maxSeconds) {
   }
   const seconds = Math.floor(Math.random() * (max - min + 1)) + min;
   return seconds * 1000;
+}
+
+function getRandomWarmupQuestionId() {
+  const configuredMaxId = Number.parseInt(process.env.cant_preResp, 10);
+  const maxId = Number.isFinite(configuredMaxId) && configuredMaxId > 0
+    ? configuredMaxId
+    : DEFAULT_PRE_RESPONSES_LIMIT;
+
+  return Math.floor(Math.random() * maxId) + 1;
+}
+
+
+async function pickRandomWarmupQuestion(tables) {
+  const maxAttempts = 8;
+
+  for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+    const randomQuestionId = getRandomWarmupQuestionId();
+    const lookup = await queryWarmup(
+      `SELECT mensaje FROM ${tables.preguntas}
+       WHERE id = $1 AND mensaje IS NOT NULL AND btrim(mensaje) <> ''
+       LIMIT 1`,
+      [randomQuestionId]
+    );
+
+    const text = (lookup.rows[0]?.mensaje || '').trim();
+    if (text) {
+      return text;
+    }
+  }
+
+  const fallback = await queryWarmup(
+    `SELECT mensaje FROM ${tables.preguntas}
+     WHERE mensaje IS NOT NULL AND btrim(mensaje) <> ''
+     ORDER BY RANDOM()
+     LIMIT 1`
+  );
+
+  return (fallback.rows[0]?.mensaje || '').trim();
 }
 
 async function resolveWarmupTables() {
@@ -225,13 +264,7 @@ async function processWarmupMessage(channelId, session, message) {
     return;
   }
 
-  const randomQuestionLookup = await queryWarmup(
-    `SELECT mensaje FROM ${tables.preguntas}
-     WHERE mensaje IS NOT NULL AND btrim(mensaje) <> ''
-     ORDER BY RANDOM()
-     LIMIT 1`
-  );
-  const randomQuestion = (randomQuestionLookup.rows[0]?.mensaje || '').trim();
+  const randomQuestion = await pickRandomWarmupQuestion(tables);
   if (!randomQuestion) {
     return;
   }
@@ -777,7 +810,7 @@ export async function getActiveChannelDispatchers(channelIds = []) {
         }
       },
       async sendText(jid, text) {
-        await session.sock.sendMessage(jid, { text });
+        return session.sock.sendMessage(jid, { text });
       }
     };
 
