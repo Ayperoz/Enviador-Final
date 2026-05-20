@@ -362,7 +362,13 @@ async function processRow(runner, channel, row, waitPromise = Promise.resolve(tr
       }
     );
 
-    await channel.sendText(jid, row?.mensaje ?? '');
+    const sendResult = await channel.sendText(jid, row?.mensaje ?? '');
+    const messageId = sendResult?.key?.id;
+
+    if (!messageId) {
+      throw new Error('WhatsApp no devolvió identificador de mensaje.');
+    }
+
     await markOutcome(
       runner,
       row.id,
@@ -370,8 +376,8 @@ async function processRow(runner, channel, row, waitPromise = Promise.resolve(tr
       STATUS_SENT,
       isTelegramChannel ? VALIDATION_TELEGRAM : VALIDATION_WHATSAPP
     );
-    logger.info(`Mensaje Enviado - ${phoneDigits} OK - Canal: ${channelName}`);
-    recordCampaignLog(runner, `Mensaje Enviado - ${phoneDigits} OK - Canal: ${channelName}`, {
+    logger.info(`Mensaje aceptado por WhatsApp - ${phoneDigits} OK - Canal: ${channelName}`);
+    recordCampaignLog(runner, `Mensaje aceptado por WhatsApp - ${phoneDigits} OK - Canal: ${channelName}`, {
       type: 'sent',
       phone: phoneDigits,
       channel: channelName

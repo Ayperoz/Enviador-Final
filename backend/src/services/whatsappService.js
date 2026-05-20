@@ -129,6 +129,35 @@ function getRandomWarmupQuestionId() {
   return Math.floor(Math.random() * maxId) + 1;
 }
 
+
+async function pickRandomWarmupQuestion(tables) {
+  const maxAttempts = 8;
+
+  for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+    const randomQuestionId = getRandomWarmupQuestionId();
+    const lookup = await queryWarmup(
+      `SELECT mensaje FROM ${tables.preguntas}
+       WHERE id = $1 AND mensaje IS NOT NULL AND btrim(mensaje) <> ''
+       LIMIT 1`,
+      [randomQuestionId]
+    );
+
+    const text = (lookup.rows[0]?.mensaje || '').trim();
+    if (text) {
+      return text;
+    }
+  }
+
+  const fallback = await queryWarmup(
+    `SELECT mensaje FROM ${tables.preguntas}
+     WHERE mensaje IS NOT NULL AND btrim(mensaje) <> ''
+     ORDER BY RANDOM()
+     LIMIT 1`
+  );
+
+  return (fallback.rows[0]?.mensaje || '').trim();
+}
+
 async function resolveWarmupTables() {
   if (warmupTablesPromise) {
     return warmupTablesPromise;
@@ -235,15 +264,7 @@ async function processWarmupMessage(channelId, session, message) {
     return;
   }
 
-  const randomQuestionId = getRandomWarmupQuestionId();
-
-  const randomQuestionLookup = await queryWarmup(
-    `SELECT mensaje FROM ${tables.preguntas}
-     WHERE id = $1 AND mensaje IS NOT NULL AND btrim(mensaje) <> ''
-     LIMIT 1`,
-    [randomQuestionId]
-  );
-  const randomQuestion = (randomQuestionLookup.rows[0]?.mensaje || '').trim();
+  const randomQuestion = await pickRandomWarmupQuestion(tables);
   if (!randomQuestion) {
     return;
   }
@@ -789,7 +810,7 @@ export async function getActiveChannelDispatchers(channelIds = []) {
         }
       },
       async sendText(jid, text) {
-        await session.sock.sendMessage(jid, { text });
+        return session.sock.sendMessage(jid, { text });
       }
     };
 
